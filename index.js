@@ -25,14 +25,28 @@ http.createServer((req,res) => {
     res.writeHead(200, {'Content-Type': 'text/plain'});
     res.end('About Page');
     break;
+    /*
+    case '/history':
+    fs.readFile('public/history.html', (err, data) => {
+    console.log('2');
+    if (err) return console.error(err);
+    res.writeHead(200, {'Content-Type': 'text/plain'});
+    res.end('Why Page');
+    break; 
     case '/why':
+    fs.readFile('public/why.html', (err, data) => {
+    console.log('2');
+    if (err) return console.error(err);
     res.writeHead(200, {'Content-Type': 'text/plain'});
     res.end('Why Page');
     break;
     case '/tutorial':
+    fs.readFile('public/tutorial.html', (err, data) => {
+    console.log('2');
+    if (err) return console.error(err);
     res.writeHead(200, {'Content-Type': 'text/plain'});
     res.end('tutorial Page');
-    break;
+    break; */
   default:
     res.writeHead(404, {'Content-Type': 'text/plain'});
     res.end('Not found');
