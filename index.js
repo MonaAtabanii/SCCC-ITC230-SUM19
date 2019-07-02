@@ -12,13 +12,10 @@ http.createServer((req,res) => {
   switch(path) {
   case '/':
     const fs = require('fs');
-    console.log('1');
     fs.readFile('public/home.html', (err, data) => {
-      console.log('2');
       if (err) return console.error(err);
       res.writeHead(200, {'Content-Type': 'text/html'});
       res.end(data.toString());
-      console.log('3');
     });
     break;
   case '/about':
@@ -49,7 +46,7 @@ http.createServer((req,res) => {
     break; */
   default:
     res.writeHead(404, {'Content-Type': 'text/plain'});
-    res.end('Not found');
+    res.end('Error 404: Sorry Page Not found');
     break;
   }
 }).listen(process.env.PORT || 3000);
