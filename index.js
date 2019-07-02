@@ -17,37 +17,40 @@ http.createServer((req,res) => {
       res.writeHead(200, {'Content-Type': 'text/html'});
       res.end(data.toString());
     });
-    break;
+  break;
   case '/about':
     res.writeHead(200, {'Content-Type': 'text/plain'});
     res.end('About Page');
-    break;
-    /*
+  break;
+    
     case '/history':
-    fs.readFile('public/history.html', (err, data) => {
-    console.log('2');
+    const fs1 = require('fs1');
+    fs1.readFile('public/history.html', (err, data) => {
     if (err) return console.error(err);
-    res.writeHead(200, {'Content-Type': 'text/plain'});
-    res.end('Why Page');
-    break; 
-    case '/why':
-    fs.readFile('public/why.html', (err, data) => {
-    console.log('2');
+    res.writeHead(200, {'Content-Type': 'text/html'});
+    res.end(data.toString());
+  });
+    break;  
+  case '/why':
+    const fs2 = require('fs2');
+     fs2.readFile('public/why.html', (err,data) => {
+     if (err) return console.error(err);
+     res.writeHead(200, {'Content-Type': 'text/html'});
+     res.end(data.toString());
+    });
+  break;
+  case '/tutorial':
+    const fs3 = require('fs3');
+    fs3.readFile('public/tutorial.html', (err, data) => {
     if (err) return console.error(err);
-    res.writeHead(200, {'Content-Type': 'text/plain'});
-    res.end('Why Page');
-    break;
-    case '/tutorial':
-    fs.readFile('public/tutorial.html', (err, data) => {
-    console.log('2');
-    if (err) return console.error(err);
-    res.writeHead(200, {'Content-Type': 'text/plain'});
-    res.end('tutorial Page');
-    break; */
-  default:
+    res.writeHead(200, {'Content-Type': 'text/html'});
+    res.end(data.toString());
+  });
+break; 
+default:
     res.writeHead(404, {'Content-Type': 'text/plain'});
-    res.end('Not found');
-    break;
+    res.end('404: Sorry page Not found');
+break;
   }
 }).listen(process.env.PORT || 3000);
 
