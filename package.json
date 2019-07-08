@@ -1,0 +1,24 @@
+{
+  "name": "sccc-itc230-sum19",
+  "version": "1.0.0",
+  "description": "Web-server App",
+  "main": "index.js",
+  "dependencies": {
+    "express": "^4.17.1",
+    "semver": "^6.2.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MonaAtabanii/SCCC-ITC230-SUM19.git"
+  },
+  "author": "Mona Mohamed",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MonaAtabanii/SCCC-ITC230-SUM19/issues"
+  },
+  "homepage": "https://github.com/MonaAtabanii/SCCC-ITC230-SUM19#readme"
+}
