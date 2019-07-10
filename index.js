@@ -7,57 +7,107 @@
 //The http module allows node.js to transfer data over http
 var http = require('http');
 const fs = require('fs');
+
+var qs = require("querystring");
+let country = require("./lib/module-items.js");
+
+ function serveStatic(res, path, contentType, responseCode){
+   if(!responseCode) responseCode = 200;
+  fs.readFile(__dirname + path, function(err, data){
+       if(err){
+         res.writeHead(500, {'Content-Type': 'text/plain'});
+         res.end('Internal Server Error');
+      }
+       else{
+         res.writeHead(responseCode, {'Content-Type': contentType});
+         res.end(data);
+       }
+   });
+ } 
+
 http.createServer((req,res) => {
-  const path = req.url.toLowerCase();
+ let url = req.url.split("?");  // separate route from query string
+  let query = qs.parse(url[1]); // convert query string to object
+  let path = url[0].toLowerCase(); 
+  
+
+  //const path = req.url.toLowerCase();
   switch(path) {
   case '/':
-    
-    fs.readFile('public/home.html', (err, data) => {
+    serveStatic(res, '/public/home.html', 'text/html');
+    /* fs.readFile('public/home.html', (err, data) => {
       if (err) return console.error(err);
       res.writeHead(200, {'Content-Type': 'text/html'});
       res.end(data.toString());
-    });
+    }); */
   break;
-  /* case '/about':
-    res.writeHead(200, {'Content-Type': 'text/plain'});
-    res.end('About Page');
-  break; */
-
+  
   case '/home':
-      fs.readFile('public/home.html', (err, data) => {
+      serveStatic(res, '/public/home.html', 'text/html');
+      /* fs.readFile('public/home.html', (err, data) => {
       if (err) return console.error(err);
       res.writeHead(200, {'Content-Type': 'text/html'});
       res.end(data.toString());
-    });
+    });  */
+  break;
     
-    case '/about':
+  case '/about':
+    serveStatic(res, '/public/history.html', 'text/html');
     //const fs1 = require('fs1');
-    fs.readFile('public/history.html', (err, data) => {
+    /* fs.readFile('public/history.html', (err, data) => {
     if (err) return console.error(err);
     res.writeHead(200, {'Content-Type': 'text/html'});
     res.end(data.toString());
-  });
-    break;  
+    });  */
+  break;  
+
   case '/why':
-    //const fs2 = require('fs2');
-     fs.readFile('public/why.html', (err,data) => {
+    serveStatic(res, '/public/why.html', 'text/html');
+     //const fs2 = require('fs2');
+     /* fs.readFile('public/why.html', (err,data) => {
      if (err) return console.error(err);
      res.writeHead(200, {'Content-Type': 'text/html'});
      res.end(data.toString());
-    });
+    });  */
   break;
+
   case '/tutorial':
-   // const fs3 = require('fs3');
-    fs.readFile('public/tutorial.html', (err, data) => {
+    serveStatic(res, '/public/tutorial.html', 'text/html');
+    // const fs3 = require('fs3');
+    /* fs.readFile('public/tutorial.html', (err, data) => {
     if (err) return console.error(err);
     res.writeHead(200, {'Content-Type': 'text/html'});
     res.end(data.toString());
-  });
-break; 
-default:
+    });  */
+  break; 
+
+  case '/getAll': 
+        res.writeHead(200, {'Content-Type': 'text/plain'});
+        let all = country.getAll();
+        let resultAll = (all) ? JSON.stringify(all): "not found";
+        res.write(resultAll);
+        //res.end('Countries List: ' + all);
+        res.end("\n");
+  break; 
+
+  case '/getItem':
+          let found = country.getItem(query.name); // get country object
+          res.writeHead(200, {'Content-Type': 'text/plain'});
+          let results = (found) ? JSON.stringify(found) : "Not found";
+         
+          res.end('Results for ' + query.name + "\n" + results);
+  break;    
+
+  case '/deleteItem':
+      let result = country.deleteItem();
+      res.writeHead(200, {'Content-Type': 'text/plain'});
+      res.end('deleted' + 'The new list is: ' + result);
+  break;
+
+  default:
     res.writeHead(404, {'Content-Type': 'text/plain'});
     res.end('404: Sorry page Not found');
-break;
+  break;
   }
 }).listen(process.env.PORT || 3000);
 
@@ -65,81 +115,3 @@ break;
 
 
 
-/* // SEARCH - handle POST (post renders body)
-app.post('/details', (req,res) => {
-    console.log(req.body);
-    let found = cartoon.get(req.body.show);
-    res.render("details", {show: req.body.show, result: found});
-});
-
-// DELETE - handle GET (get renders query)
-app.get('/delete', (req,res) => {
-    let result = cartoon.delete(req.query.show); // delete cartoon object
-    res.render('delete', {show: req.query.show, result: result});
-});
-
-// app.post('/add', (req,res) => {
-//     let found = cartoon.add(req.body.show); // add cartoon object
-//     res.render('add', {show: req.body.show, result: found});
-// });
-
-// define 404 handler
-app.use((req,res) => {
-    res.type('text/plain');
-    res.status(404);
-    res.send('404 - Not found');
-});
-
-app.listen(app.get('port'), () => {
-    console.log('Express started at ' + __dirname);
-}); */
-
-/* //brendon code
-'use strict'
-
-var http = require("http"), fs = require('fs'), qs = require("querystring");
-let book = require("../lib/book.js");
-
-function serveStatic(res, path, contentType, responseCode){
-  if(!responseCode) responseCode = 200;
-  fs.readFile(__dirname + path, function(err, data){
-      if(err){
-        res.writeHead(500, {'Content-Type': 'text/plain'});
-        res.end('Internal Server Error');
-      }
-      else{
-        res.writeHead(responseCode, {'Content-Type': contentType});
-        res.end(data);
-      }
-  });
-}
-
-http.createServer((req,res) => {
-  let url = req.url.split("?");  // separate route from query string
-  let query = qs.parse(url[1]); // convert query string to object
-  let path = url[0].toLowerCase();
-
-  switch(path) {
-    case '/': 
-      serveStatic(res, '/../public/home.html', 'text/html');
-      break;
-    case '/about':
-      res.writeHead(200, {'Content-Type': 'text/plain'});
-      res.end('About');
-      break;
-    case '/get':
-      let found = book.get(query.title); // get book object
-      res.writeHead(200, {'Content-Type': 'text/plain'});
-      let results = (found) ? JSON.stringify(found) : "Not found";
-      res.end('Results for ' + query.title + "\n" + results);
-      break;
-    case '/delete':
-      res.writeHead(200, {'Content-Type': 'text/plain'});
-      res.end('delete');
-      break;
-    default:
-      res.writeHead(404, {'Content-Type': 'text/plain'});
-      res.end('404:Page not found.');
-  }
-  
-}).listen(process.env.PORT || 3000); */
