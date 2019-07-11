@@ -81,7 +81,7 @@ http.createServer((req,res) => {
     });  */
   break; 
 
-  case '/getAll': 
+  case '/detailall': 
         res.writeHead(200, {'Content-Type': 'text/plain'});
         let all = country.getAll();
         let resultAll = (all) ? JSON.stringify(all): "not found";
@@ -90,7 +90,7 @@ http.createServer((req,res) => {
         res.end("\n");
   break; 
 
-  case '/getItem':
+  case '/detail':
           let found = country.getItem(query.name); // get country object
           res.writeHead(200, {'Content-Type': 'text/plain'});
           let results = (found) ? JSON.stringify(found) : "Not found";
@@ -98,10 +98,14 @@ http.createServer((req,res) => {
           res.end('Results for ' + query.name + "\n" + results);
   break;    
 
-  case '/deleteItem':
-      let result = country.deleteItem();
+  case '/delete':
+      let found1 = country.getItem(query.name); // get country object
+      let resultfound = (found1) ? JSON.stringify(found1) : "Not found";
+      let result = country.deleteItem(query.name);
+      let allafter = country.getAll();
+      let resultafter = (allafter) ? JSON.stringify(allafter): "not found";
       res.writeHead(200, {'Content-Type': 'text/plain'});
-      res.end('deleted' + 'The new list is: ' + result);
+      res.end("The country:  " + resultfound + ' has been deleted.' + "\n" + "\n"+ 'The new list of countries now is: ' + "\n" + resultafter);
   break;
 
   default:
