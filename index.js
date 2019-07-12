@@ -84,7 +84,7 @@ http.createServer((req,res) => {
   case '/detailall': 
         res.writeHead(200, {'Content-Type': 'text/plain'});
         let all = country.getAll();
-        let resultAll = (all) ? JSON.stringify(all): "not found";
+        let resultAll = (all) ? JSON.stringify(all): "Empty Array";
         res.write(resultAll);
         //res.end('Countries List: ' + all);
         res.end("\n");
@@ -103,9 +103,25 @@ http.createServer((req,res) => {
       let resultfound = (found1) ? JSON.stringify(found1) : "Not found";
       let result = country.deleteItem(query.name);
       let allafter = country.getAll();
-      let resultafter = (allafter) ? JSON.stringify(allafter): "not found";
+      let resultafter = (allafter) ? JSON.stringify(allafter): "Not found";
       res.writeHead(200, {'Content-Type': 'text/plain'});
       res.end("The country:  " + resultfound + ' has been deleted.' + "\n" + "\n"+ 'The new list of countries now is: ' + "\n" + resultafter);
+  break;
+
+  case '/add':
+      const newItem = {"name":query.name, "language":query.language, "population":query.population}
+      let found2 = country.getItem(newItem.name);
+      let results2 = (found2) ? 1 : "Not found"
+      if (results2 == 1){
+        res.end("Sorry can add it, already exist");
+      }
+      else{
+      let result1 = country.addItem(newItem);
+//      let result1 = country.addItem(query.name, query.language, query.population);
+      let allafter1 = country.getAll();
+      let resultafter1 = (allafter1) ? JSON.stringify(allafter1): "not found";
+      res.writeHead(200, {'Content-Type': 'text/plain'});
+      res.end("The country:  " + newItem.name + ' has been added.' + "\n" + "\n"+ 'The new list of countries now is: ' + "\n" + resultafter1);}
   break;
 
   default:
@@ -114,8 +130,3 @@ http.createServer((req,res) => {
   break;
   }
 }).listen(process.env.PORT || 3000);
-
-
-
-
-
