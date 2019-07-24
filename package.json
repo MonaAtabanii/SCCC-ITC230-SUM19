@@ -4,7 +4,11 @@
   "description": "Web-server App",
   "main": "index.js",
   "dependencies": {
+    "body-parser": "^1.19.0",
     "express": "^4.17.1",
+    "express-handlebars": "^3.1.0",
+    "express-handler": "^0.2.0",
+    "mongoose": "^5.6.5",
     "semver": "^6.2.0"
   },
   "devDependencies": {

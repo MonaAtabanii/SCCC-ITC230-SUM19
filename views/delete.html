@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Web Page Project</title>
+
+
+    <link href="css/styles.css" type="text/css" rel="stylesheet">    
+</head>
+    
+    <body>
+    <header>
+        <h1>Our Cloud9 Project Website</h1>
+        <h3>Creating a Node.js Hello World app!</h3>
+
+        <nav>
+            <ul>
+                <li><a href="/">HOME COUNTRIES LIST</a></li>
+                <li><a href="intro.html">INTRO</a></li>
+                    <li><a href="about.html">HISTORY</a></li>
+                    <li><a href="why.html">WHY USE NODE.JS?</a></li>
+                    <li><a href="tutorial.html">HELLO WORLD</a></li>
+            </ul>
+            </nav> 
+
+          
+    <div id="wrapper">
+        
+    <main>
+        
+        <h1>Hello to the countries app</h1>
+        
+        
+        <div class="container">
+{{#if delete}}
+<h2>You have just deleted {{name}}:</h2>
+  <p>Country Name: {{result.name}}</p>
+  <p>Language: {{result.language}}</p>
+  <p>Population: {{result.population}}</p>  
+{{else}}
+  <p>Sorry {{name}} does not exist</p>
+{{/if}}
+<p> The length of the list before deleting: {{length1}} countries</p>
+<p>The length of the list after deleting: {{length2}} countries</p>
+  <p><a href="home">Home Countries page</a></p>
+  </div>
+
+</main>
+    
+<aside>
+    <img src="./images/home-logo.png" alt="nodejs logo">  
+    
+</aside>
+<aside> 
+    <h3>Countries List:</h3>
+    {{#if countries.length}}
+        <table>
+                <tr>
+                  <th>Country</th>
+                  <th>Language</th>
+                  <th>Population</th>
+                </tr>
+        {{#each countries}}
+        <tr>
+                <td>{{name}}</td>
+                <td>{{language}}</td>
+                <td>{{population}}</td>
+              </tr>
+        {{/each}}
+    </table>
+        {{else}}
+        <h3> Sorry Empty list</h3>
+            {{/if}}      
+</aside>
+<footer>
+    <hr>
+    <ul>
+        <li>Copyright 2019 &copy;</li>
+        <li>All Rights Reserved</li>
+        <li><a href="/">Web Design by ITC134 Team group</a></li>
+        <li><a href="https://validator.w3.org/check?uri=referer"><img src="/images/html5.png" alt="HTML5 Logo"></a></li>
+    </ul>
+</footer>
+
+</div> <!--end of wrapper-->
+
+</body>
+<script>
+    $(document).ready(function(){
+        var buttons = $('button');
+        
+        buttons.on('click', function() {
+            var $this = $(this);
+            $("form").attr("action", $this.text().toLowerCase());
+        });
+    });
+</script>
+</html>
