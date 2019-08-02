@@ -7,6 +7,8 @@
 const express = require("express");
 const bodyParser = require("body-parser")
 const app = express();
+const Countries = require("./models/countrie");
+
 
 app.set('port', process.env.PORT || 3000);
 app.use(express.static(__dirname + '/public')); // set location for static files
@@ -19,71 +21,89 @@ app.set("view engine", ".html");
 
 // send static file as response
 //countries/home
-app.get('/home', (req, res) => {
-  res.type('text/html');
-   res.render('home', {countries: country.getAll()});
- // res.sendFile(__dirname + '/views/home.html'); 
-  
+app.get('/home', (req, res, next) => {
+  // return all records
+Countries.find({}, (err, items) => {
+  if (err) return next(err);
+  res.render('home', {countries: items});
+}); 
 });
+
 
 //countries/home
-app.get('/', (req, res) => {
-  res.type('text/html');
-  res.render('home', {countries: country.getAll()});
-  //res.sendFile(__dirname + '/views/home.html'); 
-  
+app.get('/', (req, res, next) => {
+   // return all records
+Countries.find({}, (err, items) => {
+  if (err) return next(err);
+  res.render('home', {countries: items});
+});
 });
 
-//all
-app.get('/all', (req, res) => {
-  res.type('text/html');
-  let all1 = country.getAll();
-  let resultAll = (all1) ? (all1): "Empty List";
-  res.render('all', {countries: resultAll});
- }); 
+  //all
+app.get('/all', (req, res, next) => {
+   // return all records
+Countries.find({}, (err, items) => {
+  if (err) return next(err);
+  res.render('all', {countries: items});
+});
+}); 
 
  //detail
- app.get('/detail', (req,res) => {
-  res.type('text/html');
-  let result = country.getItem(req.query.name);
-  res.render('detail', {name: req.query.name, result: result, countries: country.getAll()});
+ app.get('/detail', (req, res, next) => {
+  Countries.findOne({'name': req.query.name}, (err, item) => {
+    if (err) return next(err);
+    Countries.find({}, (err, items) => {
+      if (err) return next(err);
+    res.render('detail', {name: req.query.name, countries: items, country: item}); });
+  }); 
 });
 
 
-//delete
- app.get('/delete', (req, res) => {
-  res.type('text/html');
-  let lengthbefore = country.getAll().length;
-  let found1 = country.getItem(req.query.name); // get country object
-  let resultfound = (found1) ? found1 : "Not found";
-      let deleted = country.deleteItem(req.query.name);
-      let lengthafter = country.getAll().length;
-  res.render('delete', {name: req.query.name,
-    result: resultfound, delete: deleted, length2: lengthafter, length1: lengthbefore, countries: country.getAll()});
+ 
+// delete
+ app.get('/delete', (req, res, next) => {
+  Countries.countDocuments((err, lengthbefore )=>{  
+    Countries.findOne({'name': req.query.name}, (err, result) => {
+      if (err) return next(err);
+    Countries.deleteOne({'name': req.query.name}, (err, item) => {
+    if (err) return next(err);
+    Countries.countDocuments((err, lengthafter )=>{
+    let deleted = item.deletedCount>0;
+    Countries.find({}, (err, items) => {
+    if (err) return next(err);
+    res.render('delete', {country: result, delete: deleted, name: req.query.name, countries: items, length1: lengthbefore, length2: lengthafter}); }); 
+  }); 
+  });
+  }); 
 });
+ });
+  
 
-
- app.get('/add', (req, res) => {
-  res.type('text/html');
-     let lengthbefore1 = country.getAll().length;
-      let newItem = {"name":req.query.name, "language":req.query.language, "population":req.query.population};
-      let added = country.addItem(newItem);
-      let lengthafter1 = country.getAll().length;
-     res.render('add', {name: req.query.name,
-      country: newItem, added: added, length2: lengthafter1, length1: lengthbefore1, countries: country.getAll()});//}
-     });
+  app.get('/add', (req, res, next) => {
+    Countries.countDocuments((err, lengthbefore1 )=>{
+  var newItem = {'name': req.query.name, 'language':req.query.language, 'population': req.query.population };
+    let added = Countries.findOneAndUpdate({'name': req.query.name}, newItem, {upsert: true, new: true, useFindAndModify: false}, (err, item)=>{
+    if (err) return next(err);
+    Countries.countDocuments((err, lengthafter1 )=>{
+    Countries.find({}, (err, items) => {
+      if (err) return next(err);
+    res.render('add', {name: req.query.name,
+      country: item, added: added, lengthA: lengthafter1, lengthB: lengthbefore1, countries: items}); });
+    }); 
+  }); 
+    }); 
+}); 
      
-
-//intro 
-app.get('/intro', (req, res) => {
-  res.type('text/html');
-  res.sendFile(__dirname + '/public/intro.html'); 
-});
-
-//history or about
+/* //history or about
 app.get('/about', (req, res) => {
   res.type('text/html');
   res.sendFile(__dirname + '/public/history.html'); 
+}); 
+
+ //intro 
+app.get('/intro', (req, res) => {
+  res.type('text/html');
+  res.sendFile(__dirname + '/public/intro.html'); 
 });
 
 //why
@@ -96,18 +116,18 @@ app.get('/why', (req, res) => {
 app.get('/tutorial', (req, res) => {
   res.type('text/html');
   res.sendFile(__dirname + '/public/tutorial.html'); 
-});
-
+}); */
+ 
 
  // define 404 handler
-app.use(function(req,res) {
+app.use( (req,res) => {
   res.type('text/plain'); 
   res.status(404);
   res.send('404 - Not found');
 });
 
 // start server
-app.listen(app.get('port'), function() {
+app.listen(app.get('port'), () => {
   console.log('Express started');    
 });
 

@@ -16,10 +16,10 @@
         <nav>
             <ul>
                 <li><a href="/">HOME COUNTRIES LIST</a></li>
-                <li><a href="intro.html">INTRO</a></li>
-                    <li><a href="about.html">HISTORY</a></li>
+                <li><a href="about.html">HISTORY</a></li>
+                <!-- <li><a href="intro.html">INTRO</a></li>
                     <li><a href="why.html">WHY USE NODE.JS?</a></li>
-                    <li><a href="tutorial.html">HELLO WORLD</a></li> 
+                    <li><a href="tutorial.html">HELLO WORLD</a></li>  -->
             </ul>
             </nav> 
     
@@ -33,11 +33,11 @@
         
         <h2>Details of {{name}}:</h2>
         <div class="container">
-{{#if result}}
-  <p>Country Name: {{result.name}}</p>
-  <p>Language: {{result.language}}</p>
-  <p>Population: {{result.population}}</p>
-  <p>Do you want to delete <a href="/delete?name={{result.name}}">{{result.name}}</a>?
+{{#if country}}
+  <p>Country Name: {{country.name}}</p>
+  <p>Language: {{country.language}}</p>
+  <p>Population: {{country.population}}</p>
+  <p>Do you want to delete <a href="/delete?name={{country.name}}">{{country.name}}</a>?
   
 {{else}}
   <p>Sorry {{name}} does not exist</p>
