@@ -78,7 +78,7 @@ Countries.find({}, (err, items) => {
 });
  });
   
-
+//add
   app.get('/add', (req, res, next) => {
     Countries.countDocuments((err, lengthbefore1 )=>{
   var newItem = {'name': req.query.name, 'language':req.query.language, 'population': req.query.population };
