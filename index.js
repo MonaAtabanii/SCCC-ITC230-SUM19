@@ -93,7 +93,21 @@ Countries.find({}, (err, items) => {
   }); 
     }); 
 }); 
-     
+  
+
+ // define 404 handler
+ app.use( (req,res) => {
+  res.type('text/plain'); 
+  res.status(404);
+  res.send('404 - Not found');
+});
+
+// start server
+app.listen(app.get('port'), () => {
+  console.log('Express started');    
+});
+
+
 /* //history or about
 app.get('/about', (req, res) => {
   res.type('text/html');
@@ -117,17 +131,4 @@ app.get('/tutorial', (req, res) => {
   res.type('text/html');
   res.sendFile(__dirname + '/public/tutorial.html'); 
 }); */
- 
-
- // define 404 handler
-app.use( (req,res) => {
-  res.type('text/plain'); 
-  res.status(404);
-  res.send('404 - Not found');
-});
-
-// start server
-app.listen(app.get('port'), () => {
-  console.log('Express started');    
-});
 
