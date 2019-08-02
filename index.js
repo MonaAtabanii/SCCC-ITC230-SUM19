@@ -58,9 +58,7 @@ Countries.find({}, (err, items) => {
   }); 
 });
 
-
- 
-// delete
+ // delete
  app.get('/delete', (req, res, next) => {
   Countries.countDocuments((err, lengthbefore )=>{  
     Countries.findOne({'name': req.query.name}, (err, result) => {
@@ -78,7 +76,7 @@ Countries.find({}, (err, items) => {
 });
  });
   
-
+ //add
   app.get('/add', (req, res, next) => {
     Countries.countDocuments((err, lengthbefore1 )=>{
   var newItem = {'name': req.query.name, 'language':req.query.language, 'population': req.query.population };
@@ -93,7 +91,21 @@ Countries.find({}, (err, items) => {
   }); 
     }); 
 }); 
-     
+  
+
+ // define 404 handler
+ app.use( (req,res) => {
+  res.type('text/plain'); 
+  res.status(404);
+  res.send('404 - Not found');
+});
+
+// start server
+app.listen(app.get('port'), () => {
+  console.log('Express started');    
+});
+
+
 /* //history or about
 app.get('/about', (req, res) => {
   res.type('text/html');
@@ -119,15 +131,5 @@ app.get('/tutorial', (req, res) => {
 }); */
  
 
- // define 404 handler
-app.use( (req,res) => {
-  res.type('text/plain'); 
-  res.status(404);
-  res.send('404 - Not found');
-});
 
-// start server
-app.listen(app.get('port'), () => {
-  console.log('Express started');    
-});
 
