@@ -9,10 +9,13 @@ const bodyParser = require("body-parser")
 const app = express();
 const Countries = require("./models/countrie");
 
-
 app.set('port', process.env.PORT || 3000);
 app.use(express.static(__dirname + '/public')); // set location for static files
+app.use(express.static(__dirname + '/views')); // set location for static files
 app.use(bodyParser.urlencoded({extended: true})); // parse form submissions
+app.use('/api', require('cors')()); // set Access-Control-Allow-Origin header for api route
+app.use(bodyParser.json());
+
 
 let country = require("./lib/module-items.js");
 let handlebars =  require("express-handlebars");
@@ -29,7 +32,63 @@ Countries.find({}, (err, items) => {
 }); 
 });
 
+//API routs
+//get all countries data
+app.get('/api/countries', (req, res, next) => {
+  Countries.find({}, (err, items) => {
+   if (err) return next(err);
+   res.json(items);
+  });
+  });
 
+//get 1 country data
+app.get('/api/country/:name', (req, res, next) => {
+  Countries.findOne({'name': req.params.name}, (err, item) => {
+    if (err) return next(err);
+    if (item){
+    res.json(item);
+    }
+    else {
+      return res.status(500).send('Sorry this country does not exist');
+    }
+  }); 
+});
+
+// delete 1 country
+app.get('/api/delete/:name', (req, res, next) => { 
+    Countries.findOne({'name': req.params.name}, (err, result) => {
+      if (err) return next(err);
+      if (result){
+     Countries.deleteOne({'name': req.params.name}, (err, item) => {
+      if (err) return next(err);
+      res.json(["successed, You have just deleted:  ", result]);  
+     });}
+    else{
+      return res.status(500).send('Sorry this country does not exist');
+    }
+  });  
+ });
+
+ //add post route from the apiform
+ app.post('/api/add/', (req,res,next) => {
+  var newItem = {'name': req.body.name, 'language':req.body.language, 'population': req.body.population };
+  Countries.findOneAndUpdate({'name': req.body.name}, newItem, {upsert: true, new:true, useFindAndModify: false}, (err, result) => {
+      res.json(["successed, You have just Added/Updated:  ", result]);
+  });
+});
+
+//add get rout from the url
+app.get('/api/add/:name/:language/:population', (req,res,next) => {
+  var newItem = {'name': req.params.name, 'language':req.params.language, 'population': req.params.population };
+  Countries.findOneAndUpdate({'name': newItem.name}, newItem, {upsert: true, new:true, useFindAndModify: false}, (err, result) => {
+      res.json(["successed, You have just Added/Updated:  ", result]);
+
+  });
+});
+
+ 
+
+//Assignment 5 routs
 //countries/home
 app.get('/', (req, res, next) => {
    // return all records
@@ -92,6 +151,20 @@ Countries.find({}, (err, items) => {
     }); 
 }); 
   
+//API ADD Form
+app.get('/apiform', (req, res) => {
+  Countries.find({}, (err, items) => {
+    if (err) return next(err);
+    res.render('apiform', { countries: items}); 
+}); 
+});
+
+//history or about
+app.get('/about', (req, res) => {
+  res.type('text/html');
+  res.sendFile(__dirname + '/public/about.html'); 
+}); 
+
 
  // define 404 handler
  app.use( (req,res) => {
@@ -105,14 +178,7 @@ app.listen(app.get('port'), () => {
   console.log('Express started');    
 });
 
-
-/* //history or about
-app.get('/about', (req, res) => {
-  res.type('text/html');
-  res.sendFile(__dirname + '/public/history.html'); 
-}); 
-
- //intro 
+/* //intro 
 app.get('/intro', (req, res) => {
   res.type('text/html');
   res.sendFile(__dirname + '/public/intro.html'); 

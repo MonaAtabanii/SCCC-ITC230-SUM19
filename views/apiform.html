@@ -19,10 +19,9 @@
                 <li><a href="/">HOME COUNTRIES LIST</a></li>
                 <li><a href="about.html">HISTORY</a></li>
                 <li><a href="apiform.html">API ADD Form</a></li>
-                    <!-- <li><a href="intro.html">INTRO</a></li>
-                    <li><a href="why.html">WHY USE NODE.JS?</a></li>
-                    <li><a href="tutorial.html">HELLO WORLD</a></li> -->
-                
+                <!-- <li><a href="intro.html">INTRO</a></li>
+                <li><a href="why.html">WHY USE NODE.JS?</a></li>
+                <li><a href="tutorial.html">HELLO WORLD</a></li> -->
                 
             </ul>
             </nav> 
@@ -33,64 +32,16 @@
         
     <main>
         
-        <h1>Hello to the countries app</h1>
-        <p>You can browse all the list, look for specific country, delete specific country, or add new country!</p>
-
-        <h2>Countries</h2>
-         
-        
-
-            <!-- To display all -->
-            <div class="container">
-        <h4>Display All:</h4>
-    <form method="GET" action="/all">
-    <div class="row">
-             <a href="http://localhost:3000/all">Disply All</a>
-   </div>
-</form>
-
-
- <!-- To search for country -->
- <div class="container">
-    <h3> Look for specific country:</h3>
-            <form method="GET" action="/detail">
-                <div class="row">
-                <div class="col-25">
-                <label for="country">Country:   </label>
-                </div>
-                <div class="col-75">
-                <input type="text" name="name" placeholder="Country" required maxlength="100">
-            </div>
-            </div>   
-        <div class="row">
-                <button>DETAIL</button>      
-       </div>
-       </form>
-       </div>
-
-   <!-- To  delete country -->
-   <div class="container">
-<h3> Delete specific country:</h3>
-<form method="GET" action="/delete">
-    <div class="row">
-    <div class="col-25">
-    <label for="country">Country:   </label>
-    </div>
-    <div class="col-75">
-    <input type="text" name="name" placeholder="Country" required maxlength="100">
-</div>
-</div>   
-<div class="row">
-    <button>DELETE</button>      
-</div>
-</form>
-</div>
+        <h1>Hello to the API Add/Update Form</h1>
+        <p>You can Add new country or update existing country here</p>
         
   
+        <h1>Add form</h1>
+
 <!-- To  add country -->
 <div class="container">
-        <h3> Add country:</h3>
-        <form method="GET" action="/add">
+        <h3> Add/Update country:</h3>
+        <form method="POST" action="/api/add/">
             <div class="row">
             <div class="col-25">
             <label for="country">Country:   </label>
@@ -116,7 +67,7 @@
         </div>
     </div> 
         <div class="row">
-            <button>ADD</button>      
+            <button>ADD-UPDATE</button>      
         </div>
         </form>
         </div>
@@ -129,7 +80,15 @@
         <img src="./images/home-logo.png" alt="nodejs logo">  
         
     </aside>
-    <aside> 
+    <!-- <aside> 
+        <script>
+            const Countries = require("./models/countrie");
+            //let all = country.getAll();
+            let  countries = Countries.find({}, (err, items) => {
+                if (err) return next(err);
+            return items});
+        </script>
+
         <h3>Countries List:</h3>
         {{#if countries.length}}
             <table>
@@ -149,7 +108,7 @@
             {{else}}
             <h3> Sorry Empty list</h3>
                 {{/if}}      
-    </aside>
+    </aside> -->
 
     <footer>
         <hr>
@@ -164,7 +123,7 @@
     </div> <!--end of wrapper-->
    
 </body>
-<script>
+<!-- <script>
     $(document).ready(function(){
         var buttons = $('button');
         
@@ -173,7 +132,7 @@
             $("form").attr("action", $this.text().toLowerCase());
         });
     });
-</script>
+</script> -->
 </html>
 
 
