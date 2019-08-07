@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Web Page Project</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.6.0/react.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.6.0/react-dom.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.25.0/babel.min.js"></script>
+
+    <link href="css/styles.css" type="text/css" rel="stylesheet">    
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+</head>
+
+<body>
+    <header>
+        <h1>Our Cloud9 Project Website</h1>
+        <h3>Creating a Node.js Countries React App</h3>
+        <nav>
+            <ul>
+                <li><a href="/">HOME COUNTRIES LIST</a></li>
+                <li><a href="about.html">HISTORY</a></li>
+                <li><a href="apiform.html">API ADD Form</a></li>
+                <!-- <li><a href="reacthome.html">REACT HOME</a></li>   
+                <li><a href="intro.html">INTRO</a></li>
+                    <li><a href="why.html">WHY USE NODE.JS?</a></li>
+                    <li><a href="tutorial.html">HELLO WORLD</a></li> -->     
+            </ul>
+        </nav> 
+    </header>
+
+    <div id="wrapper">
+        <main>
+            <h1>Hello to the countries React app</h1>
+            <p>For country details please click on the country name</p>
+            <div id="root"></div>
+            <script type="text/babel">
+                class Countries extends React.Component{
+                        constructor(props){
+                            super(props); //instantiates parent class
+                            this.state = {
+                                items: {{{countries}}},
+                                curItem: {}
+                            };
+                            this.onClear = this.onClear.bind(this);
+                            this.showDetails = this.showDetails.bind(this);
+                        }
+                        
+                        showDetails(event){
+                            console.log(event.target);
+                            let editItem = this.state.items.find((item) => {
+                                return item._id == event.target.id;
+                            });
+                            this.setState({curItem: editItem});
+                        }
+                        
+                        onClear(){
+                            this.setState({curItem: {}});
+                        }
+                                    
+                        render() {
+                            return(
+                                <div>
+                                    <div>
+                                        <aside>
+                                            <ItemList
+                                                items = {this.state.items}
+                                                clickHandler = {this.showDetails}
+                                            /> 
+                                        </aside>
+                                        <aside>
+                                            <ItemDetail item={this.state.curItem} />
+                                        </aside>
+                                    </div>
+                                </div>
+                            );
+                        }
+                } 
+                    
+                        
+                const ItemList = (props) => {
+                    const items_list = props.items.map((item) => {
+                        return <li id={item._id} key={item._id} onClick={props.clickHandler}>{item.name}</li>
+                    });
+                        return (
+                            <div>
+                                <h1>Countries List</h1>
+                                <ul>
+                                    {items_list}
+                                </ul>
+                            </div>
+                        );
+                }//for what?? and also the one before div container
+                
+                const ItemDetail = (props) => {
+                    return (
+                        <div>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Country</th>
+                                        <th>Language</th>
+                                        <th>Population</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>{props.item.name}</td>
+                                        <td>{props.item.language}</td>
+                                        <td>{props.item.population}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    );
+                }
+                                
+                ReactDOM.render(<Countries />, document.getElementById('root'));
+            </script>
+        </main>
+        
+        <!-- <aside>
+            <img src="./images/home-logo.png" alt="nodejs logo">  
+        </aside> -->
+
+    <footer>
+            <ul>
+                <li>Copyright 2019 &copy;</li>
+                <li>All Rights Reserved</li>
+                <li><a href="/">Web Design by ITC134 Team group</a></li>
+                <li><a href="https://validator.w3.org/check?uri=referer"><img src="/images/html5.png" alt="HTML5 Logo"></a></li>
+            </ul>
+    </footer> 
+    </div> 
+</body>
+</html>

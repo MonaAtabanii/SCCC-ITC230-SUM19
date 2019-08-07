@@ -15,7 +15,9 @@ app.use(express.static(__dirname + '/views')); // set location for static files
 app.use(bodyParser.urlencoded({extended: true})); // parse form submissions
 app.use('/api', require('cors')()); // set Access-Control-Allow-Origin header for api route
 app.use(bodyParser.json());
-
+app.use((err, req, res, next) => {
+  console.log(err);
+});
 
 let country = require("./lib/module-items.js");
 let handlebars =  require("express-handlebars");
@@ -32,7 +34,21 @@ Countries.find({}, (err, items) => {
 }); 
 });
 
-//API routs
+/////////////////////////////////////////////////////////////
+//Assignment 7 route
+//React routes
+app.get('/reacthome', (req, res, next) => {
+  // return all records
+Countries.find({}, (err, items) => {
+ if (err) return next(err);
+ res.render('reacthome', {countries: JSON.stringify(items)});
+});
+});
+
+
+////////////////////////////////////////////////////////////
+//Assignment 6 routes
+//API routes
 //get all countries data
 app.get('/api/countries', (req, res, next) => {
   Countries.find({}, (err, items) => {
@@ -77,7 +93,7 @@ app.get('/api/delete/:name', (req, res, next) => {
   });
 });
 
-//add get rout from the url
+//add get route from the url
 app.get('/api/add/:name/:language/:population', (req,res,next) => {
   var newItem = {'name': req.params.name, 'language':req.params.language, 'population': req.params.population };
   Countries.findOneAndUpdate({'name': newItem.name}, newItem, {upsert: true, new:true, useFindAndModify: false}, (err, result) => {
@@ -86,9 +102,9 @@ app.get('/api/add/:name/:language/:population', (req,res,next) => {
   });
 });
 
- 
 
-//Assignment 5 routs
+///////////////////////////////////////////////////////////////////////
+//Assignment 5 routes
 //countries/home
 app.get('/', (req, res, next) => {
    // return all records
