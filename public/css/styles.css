@@ -275,3 +275,20 @@ table {
   tr:nth-child(even) {
     background-color: #dddddd;
   }
+
+  .flex-container {
+    display: -webkit-flex;
+    display: flex;
+    width: 600px;
+    background-color: lightgrey;
+}
+#item-list {
+    background-color: cornflowerblue;
+    width: 30%;
+    padding: 0px 10px 0px 0px;
+}
+#item-details {
+    background-color: yellow;
+    width: 75%;
+    padding: 10px;
+}

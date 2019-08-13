@@ -24,27 +24,74 @@ let handlebars =  require("express-handlebars");
 app.engine(".html", handlebars({extname: '.html', defaultLayout: false}));
 app.set("view engine", ".html");
 
-// send static file as response
-//countries/home
-app.get('/home', (req, res, next) => {
+/////////////////////////////////////////////////////////////
+//Assignment 8 route
+app.get('/reacthomepart2', (req, res, next) => {
   // return all records
 Countries.find({}, (err, items) => {
-  if (err) return next(err);
-  res.render('home', {countries: items});
-}); 
+ if (err) return next(err);
+ res.render('reacthomepart2', {countries: JSON.stringify(items)});
 });
+});
+
+app.get('/reacthome1', (req, res, next) => {
+  // return all records
+Countries.find({}, (err, items) => {
+ if (err) return next(err);
+ res.render('reacthome1', {countries: JSON.stringify(items)});
+});
+});
+
+// delete 1 country by _id for react
+app.get('/api/delete1/:_id', (req, res, next) => { 
+  Countries.findOne({'_id': req.params._id}, (err, result) => {
+    if (err) return next(err);
+    if (result){
+   Countries.deleteOne({'_id': req.params._id}, (err, item) => {
+    if (err) return next(err);
+    res.json(["successed, You have just deleted:  ", result]);  
+   });}
+  else{
+    return res.status(500).send('Sorry this country does not exist');
+  }
+});  
+});
+
+//add post route from the by name for react
+app.post('/api/add1/', (req,res,next) => {
+  var newItem = {'name': req.body.name, 'language':req.body.language, 'population': req.body.population };
+  Countries.findOneAndUpdate({'name': req.body.name}, newItem, {upsert: true, new:true, useFindAndModify: false}, (err, result) => {
+      res.json(result);
+  });
+});
+
+//another way to do add by id
+/*app.post('/api/add1/', (req,res, next) => {
+  // find & update existing item, or add new 
+  if (!req.body._id) { // insert new document
+      let newItem = new Countries({name:req.body.name,language:req.body.language,population:req.body.population});
+      newItem.save((err,result) => {
+          if (err) return next(err);
+          res.json({updated: 0, _id: result._id});
+      });
+  } else { // update existing document
+      Countries.findOneAndUpdate({ _id: req.body._id, name:req.body.name}, {name:req.body.name, language: req.body.language, population: req.body.population }, {upsert: true, useFindAndModify: false}, (err, result1) => {
+          if (err) return next(err);
+          res.json({updated: result1.nModified, _id: req.body._id});
+      });
+  }
+});*/
 
 /////////////////////////////////////////////////////////////
 //Assignment 7 route
 //React routes
-app.get('/reacthome', (req, res, next) => {
+app.get('/reacthomepart1', (req, res, next) => {
   // return all records
 Countries.find({}, (err, items) => {
  if (err) return next(err);
- res.render('reacthome', {countries: JSON.stringify(items)});
+ res.render('reacthomepart1', {countries: JSON.stringify(items)});
 });
 });
-
 
 ////////////////////////////////////////////////////////////
 //Assignment 6 routes
@@ -181,6 +228,15 @@ app.get('/about', (req, res) => {
   res.sendFile(__dirname + '/public/about.html'); 
 }); 
 
+// send static file as response
+//countries/home
+app.get('/home', (req, res, next) => {
+  // return all records
+Countries.find({}, (err, items) => {
+  if (err) return next(err);
+  res.render('home', {countries: items});
+}); 
+});
 
  // define 404 handler
  app.use( (req,res) => {
