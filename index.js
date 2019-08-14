@@ -34,14 +34,6 @@ Countries.find({}, (err, items) => {
 });
 });
 
-app.get('/reacthome1', (req, res, next) => {
-  // return all records
-Countries.find({}, (err, items) => {
- if (err) return next(err);
- res.render('reacthome1', {countries: JSON.stringify(items)});
-});
-});
-
 // delete 1 country by _id for react
 app.get('/api/delete1/:_id', (req, res, next) => { 
   Countries.findOne({'_id': req.params._id}, (err, result) => {
