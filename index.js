@@ -52,10 +52,18 @@ app.get('/api/delete1/:_id', (req, res, next) => {
 //add post route from the by name for react
 app.post('/api/add1/', (req,res,next) => {
   var newItem = {'name': req.body.name, 'language':req.body.language, 'population': req.body.population };
-  Countries.findOneAndUpdate({'name': req.body.name}, newItem, {upsert: true, new:true, useFindAndModify: false}, (err, result) => {
+  if (req.body._id && req.body.name){
+    Countries.updateOne({'_id': req.body._id}, newItem, (err, result) => {
       res.json(result);
-  });
+    });
+  }
+  else {
+    Countries.findOneAndUpdate({'name': req.body.name}, newItem, {upsert: true, new: true, useFindAndModify: false}, (err, result) => {
+      res.json(result);}
+    );
+  } 
 });
+
 
 //another way to do add by id
 /*app.post('/api/add1/', (req,res, next) => {
